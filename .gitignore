@@ -1,0 +1,27 @@
+# --- Folder Hasil Build & Output ---
+[Bb]in/
+[Rr]elease/
+[Dd]ebug/
+
+# --- File Proyek & User Settings ---
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+
+# --- File Library & Dependencies (Saran) ---
+# Mengingat libmpv-2.dll ukurannya sangat besar (115 MB), 
+# sangat disarankan untuk tidak memasukkannya ke Git.
+# Gunakan Git LFS jika memang harus masuk repositori.
+libmpv-2.dll
+libmpv.dll.a
+
+# --- File Installer & Script Build ---
+# Folder installer hasil build Inno Setup (juga folder bin)
+installer/
+# Opsional: abaikan file setup hasil compile jika ada di root
+*.exe
+
+# --- Log & File Sementara ---
+*.log
+.DS_Store

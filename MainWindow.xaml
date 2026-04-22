@@ -1,0 +1,140 @@
+<Window x:Class="LiveWallpaper.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:pages="clr-namespace:LiveWallpaper.Pages"
+        Title="LiveWallpaper"
+        MinWidth="820" MinHeight="540"
+        Width="880" Height="580"
+        Background="{StaticResource BrBg0}"
+        Closing="OnClosing">
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="200"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+    <!-- ── SIDEBAR ──────────────────────────────────────────────────────── -->
+    <Border Grid.Column="0"
+            Background="#080912"
+            BorderBrush="{StaticResource BrBorder}"
+            BorderThickness="0,0,1,0">
+      <DockPanel LastChildFill="True" Margin="12,20,12,14">
+
+        <!-- Logo -->
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,18">
+          <TextBlock Text="LiveWallpaper"
+                     FontSize="17" FontWeight="Bold"
+                     Foreground="White"/>
+          <TextBlock Text="desktop live wallpaper engine"
+                     FontSize="10" Foreground="{StaticResource BrTextDim}"
+                     Margin="0,2,0,0"/>
+        </StackPanel>
+
+        <Rectangle DockPanel.Dock="Top" Height="1"
+                   Fill="{StaticResource BrBorder}" Margin="0,0,0,12"/>
+
+        <!-- Bottom: stop + brand -->
+        <StackPanel DockPanel.Dock="Bottom">
+          <Button Style="{StaticResource StopBtn}"
+                  Content="Stop All"
+                  Margin="0,0,0,8"
+                  Click="OnStopAll"/>
+          <Border Background="#0A0C17"
+                  BorderBrush="{StaticResource BrBorder}"
+                  BorderThickness="1" CornerRadius="7"
+                  Padding="10,7">
+            <TextBlock Text="MockingCLOWN v3.0"
+                       FontSize="10"
+                       Foreground="{StaticResource BrTextDim}"/>
+          </Border>
+        </StackPanel>
+
+        <!-- Nav -->
+        <StackPanel DockPanel.Dock="Top" Margin="0,4,0,0">
+          <TextBlock Text="LIVE WALLPAPER"
+                     FontSize="10" FontWeight="Bold"
+                     Foreground="{StaticResource BrTextDim}"
+                     Margin="4,0,4,6"/>
+
+          <Button x:Name="BtnVideoSingle"
+                  Style="{StaticResource NavBtnActive}"
+                  Content="Single File"
+                  Click="OnNav_VideoSingle"/>
+
+          <Button x:Name="BtnVideoBatch"
+                  Style="{StaticResource NavBtn}"
+                  Content="Folder Playlist"
+                  Click="OnNav_VideoBatch"/>
+
+          <!-- Global options separator -->
+          <Rectangle Height="1" Fill="{StaticResource BrBorder}" Margin="4,14,4,10"/>
+
+          <TextBlock Text="OPTIONS"
+                     FontSize="10" FontWeight="Bold"
+                     Foreground="{StaticResource BrTextDim}"
+                     Margin="4,0,4,8"/>
+
+          <!-- Auto-pause toggle -->
+          <Border Background="#0D1020"
+                  BorderBrush="{StaticResource BrBorder}"
+                  BorderThickness="1" CornerRadius="7"
+                  Padding="10,8" Margin="0,0,0,6">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <StackPanel Grid.Column="0">
+                <TextBlock Text="Auto Pause"
+                           FontSize="12" Foreground="{StaticResource BrTextPri}"/>
+                <TextBlock Text="Pause on fullscreen/max"
+                           FontSize="10" Foreground="{StaticResource BrTextDim}"
+                           Margin="0,1,0,0"/>
+              </StackPanel>
+              <CheckBox x:Name="ChkAutoPause"
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Checked="OnAutoPauseChanged"
+                        Unchecked="OnAutoPauseChanged"/>
+            </Grid>
+          </Border>
+
+        </StackPanel>
+
+      </DockPanel>
+    </Border>
+
+    <!-- ── CONTENT + STATUS ──────────────────────────────────────────────── -->
+    <Grid Grid.Column="1">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="30"/>
+      </Grid.RowDefinitions>
+
+      <Frame x:Name="PageFrame"
+             Grid.Row="0"
+             NavigationUIVisibility="Hidden"
+             Background="{StaticResource BrBg0}"/>
+
+      <Border Grid.Row="1"
+              Background="#080912"
+              BorderBrush="{StaticResource BrBorder}"
+              BorderThickness="0,1,0,0">
+        <DockPanel Margin="16,0">
+          <Ellipse x:Name="StatusDot"
+                   Width="6" Height="6"
+                   Fill="#3A9955"
+                   Margin="0,0,7,0"
+                   Visibility="Collapsed"
+                   VerticalAlignment="Center"/>
+          <TextBlock x:Name="StatusText"
+                     Text="Idle  --  no wallpaper active"
+                     FontSize="11"
+                     Foreground="{StaticResource BrTextDim}"
+                     VerticalAlignment="Center"/>
+        </DockPanel>
+      </Border>
+    </Grid>
+  </Grid>
+</Window>

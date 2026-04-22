@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>LiveWallpaper</AssemblyName>
+    <RootNamespace>LiveWallpaper</RootNamespace>
+    <SelfContained>false</SelfContained>
+    <LangVersion>preview</LangVersion>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <!-- Use app.ico for the .exe icon (user must place app.ico in project root) -->
+    <ApplicationIcon Condition="Exists('app.ico')">app.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- libmpv-2.dll: copy to output if present -->
+    <None Update="libmpv-2.dll" Condition="Exists('libmpv-2.dll')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <!-- app.ico: copy to output so tray icon loader can find it at runtime -->
+    <None Update="app_icon.ico" Condition="Exists('app_icon.ico')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <!-- Runtime config for GC tuning -->
+  <ItemGroup>
+    <None Update="runtimeconfig.template.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <!-- Exclude deleted music files from build -->
+  <ItemGroup>
+    <Compile Remove="Engine/MusicEngine.cs"/>
+    <Page    Remove="Pages/MusicSinglePage.xaml"/>
+    <Compile Remove="Pages/MusicSinglePage.xaml.cs"/>
+    <Page    Remove="Pages/MusicBatchPage.xaml"/>
+    <Compile Remove="Pages/MusicBatchPage.xaml.cs"/>
+  </ItemGroup>
+</Project>
