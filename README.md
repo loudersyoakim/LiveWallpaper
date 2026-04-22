@@ -5,6 +5,10 @@ Putar video sebagai wallpaper desktop dengan dukungan multi-monitor, playlist, s
 
 ---
 
+## Download Jadi (Siap Pakai)
+Males build sendiri? Kamu bisa langsung ambil file installernya di sini:
+**[Download via Google Drive](https://drive.google.com/drive/folders/1bw4czk7HeGtxF7x2ryqUJfMqGQZh53J3?usp=sharing)**
+
 ## Fitur 
 
 
