@@ -5,71 +5,99 @@ Putar video sebagai wallpaper desktop dengan dukungan multi-monitor, playlist, s
 
 ---
 
-## Fitur Unggulan
+## Fitur 
 
 
 | Fitur | Keterangan |
 |-------|------------|
-| **Hemat RAM** | Penggunaan resource sangat rendah (**~40 MB - 100 MB**). Ringan untuk multitasking! |
-| **Single & Playlist** | Putar satu video loop atau seluruh isi folder secara berurutan. |
-| **Auto-switch** | Ganti video otomatis dengan timer (10 detik s/d 1 hari). |
-| **Smart Pause** | Video otomatis *pause* saat ada aplikasi lain di-maximize (hemat GPU). |
+| **Ultra Light RAM** | Penggunaan resource sangat efisien (**~41 MB** pada pengujian terbaru). Sangat ringan! |
+| **Smart Pause** | Video otomatis *pause* saat ada aplikasi di-maximize untuk menghemat GPU/Baterai. |
 | **Custom Icon** | Bisa ganti ikon aplikasi sesuka hati (cek bagian Persiapan). |
+| **Multi-Monitor** | Mendukung pengaturan wallpaper berbeda untuk tiap monitor. |
 | **Full Control** | Kontrol Volume, Speed, Brightness, Contrast, dan Posisi Video (Pan X/Y). |
 
 ---
 
-## Persiapan Sebelum Build
+## 🛠️ Persiapan Sebelum Build
 
 ### 1. Install .NET 9 SDK
-Download di: [dotnet.microsoft.com](https://dotnet.microsoft.com/en-us/download/dotnet/9.0) (Pilih x64).
+Download di: [.NET 9.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
+Pilih **Windows x64**. Verifikasi dengan ketik `dotnet --version` di CMD (harus muncul angka `9.x`).
 
 ### 2. Download libmpv
-Download file `libmpv` terbaru (misal versi 2026 atau terbaru) dari [shinchiro build](https://sourceforge.net). 
-**Wajib:** Salin file `libmpv-2.dll` ke folder root project (sejajar dengan `.csproj`).
+Download dari [shinchiro build](https://sourceforge.net):
+- Ekstrak file `.7z` tersebut.
+- Ambil file **`libmpv-2.dll`**.
+- **Wajib:** Salin ke folder root project (sejajar dengan `LiveWallpaper.csproj`).
 
-### 3. Ganti Ikon Suka-Suka (Custom Icon)
-Kamu bisa mengganti ikon aplikasi dan tray menu dengan ikon buatanmu sendiri:
-- Siapkan file gambar dalam format **`.ico`** (Wajib `.ico`, bukan `.png` atau `.jpg`).
-- Beri nama file tersebut: **`app_icon.ico`**.
-- Timpa/Ganti file lama di folder project dengan file milikmu.
-- Saat di-build (Publish), ikon tersebut akan otomatis tertanam di file `.exe` dan muncul di system tray.
+### 3. Custom App Icon (PENTING)
+Kamu bisa mengganti ikon aplikasi dan tray menu dengan milikmu sendiri:
+- Siapkan file gambar format **`.ico`** (Wajib `.ico`, bukan png/jpg).
+- Rename menjadi **`app_icon.ico`**.
+- Timpa/Ganti file ikon lama di folder root project.
+- Ikon ini akan otomatis tertanam ke dalam `.exe` saat proses build.
+
+### 4. Install Inno Setup 7
+Diperlukan jika kamu ingin membuat file Installer (`.exe` setup).
+Download di: [jrsoftware.org](https://jrsoftware.org/isinfo.php). Install dengan pengaturan default.
 
 ---
 
-## Cara Build & Run
+## Struktur Folder Project
 
-### Build Cepat (Portable)
-Buka terminal di folder project, ketik:
+Pastikan susunan folder kamu seperti ini agar tidak error saat build:
+
+```text
+LiveWallpaper/
+  Engine/            (Logic Win32 & Mpv)
+  Pages/             (UI/XAML Pages)
+  App.xaml
+  LiveWallpaper.csproj
+  libmpv-2.dll       <-- Hasil download (Wajib ada)
+  app_icon.ico       <-- Ikon custom kamu
+  setup.iss          <-- Script Inno Setup
+  build.bat          <-- Script build otomatis
+  build_installer.bat
+```
+
+---
+
+## Cara Build & Distribusi
+
+### A. Build Biasa (Untuk Test)
+Jalankan `build.bat` atau ketik:
 ```bash
 dotnet build -c Release
 ```
-Hasil build ada di `bin\Release\net9.0-windows\win-x64\`.
+Hasil ada di: `bin\Release\net9.0-windows\win-x64\`
 
-### Build Installer (.exe Setup)
-Double-click file **`build_installer.bat`**. 
-Script ini akan menghasilkan satu file installer di folder `installer/` yang sudah *self-contained* (tidak perlu install .NET lagi di PC lain).
+### B. Build Installer (Untuk Dibagikan)
+Double-click **`build_installer.bat`**. Script ini akan:
+1. Melakukan `dotnet publish` (Self-contained, user tidak perlu install .NET lagi).
+2. Menjalankan Inno Setup untuk membungkus semuanya jadi satu file.
+3. Hasilnya ada di folder **`installer\LiveWallpaper_Setup_v3.1.exe`**.
 
 ---
 
-## Penggunaan Sumber Daya (Resource Usage)
+## Penggunaan Sumber Daya
 
-Aplikasi ini sudah dioptimasi habis-habisan:
-- **RAM:** Stabil di kisaran **41 MB** (bisa naik sedikit tergantung resolusi video). Ini jauh lebih kecil dibanding browser atau aplikasi wallpaper lainnya.
-- **GPU:** Menggunakan hardware acceleration via `libmpv`, beban CPU tetap hampir 0%.
+Aplikasi ini sangat ramah RAM:
+- **RAM:** Stabil di kisaran **41 MB - 160 MB** (tergantung resolusi video).
+- **GPU:** Menggunakan hardware acceleration, sehingga CPU tetap rendah.
 
 ---
 
 ## Lisensi & Aturan (Free to Use)
 
-Project ini bersifat **Open Source**. Kamu bebas menggunakan, menyebarkan, bahkan memodifikasi kodenya sesuka hati (Open for modification). 
+Project ini menggunakan lisensi MIT untuk kode C# dan LGPL untuk mpv. 
+**Bebas dipakai, dimodif, atau dirusak suka hati awokwok.** 
 
-**Satu syarat aja awokwok:** 
-Jangan hapus **Watermark (WM)** atau kredit asli dari project ini!
+**Satu Syarat:** 
+Jangan hapus **Watermark (WM)** atau kredit asli di bawah ini. Hargai tukang ketiknya!
 
 **Original Author:**
 > **MockingCLOWN - LOUDERS YOAKIM TELAUMBANUA**
 
 ---
 
-*Made with GABUT and a lot of Coffee by MockingCLOWN*
+*Made with KEGABUTAN by MockingCLOWN*
