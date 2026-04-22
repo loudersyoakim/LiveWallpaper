@@ -18,7 +18,7 @@ Putar video sebagai wallpaper desktop dengan dukungan multi-monitor, playlist, s
 
 ---
 
-## 🛠️ Persiapan Sebelum Build
+## Persiapan Sebelum Build
 
 ### 1. Install .NET 9 SDK
 Download di: [.NET 9.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
