@@ -1,11 +1,11 @@
-# 🎥 LiveWallpaper (v3.0)
+# LiveWallpaper (v3.1)
 
 Desktop live wallpaper engine berbasis **mpv** untuk Windows 10/11. 
 Putar video sebagai wallpaper desktop dengan dukungan multi-monitor, playlist, scheduler, dan kontrol penuh.
 
 ---
 
-## 🚀 Fitur Unggulan
+## Fitur Unggulan
 
 
 | Fitur | Keterangan |
@@ -19,7 +19,7 @@ Putar video sebagai wallpaper desktop dengan dukungan multi-monitor, playlist, s
 
 ---
 
-## 🛠️ Persiapan Sebelum Build
+## Persiapan Sebelum Build
 
 ### 1. Install .NET 9 SDK
 Download di: [dotnet.microsoft.com](https://dotnet.microsoft.com/en-us/download/dotnet/9.0) (Pilih x64).
@@ -37,7 +37,7 @@ Kamu bisa mengganti ikon aplikasi dan tray menu dengan ikon buatanmu sendiri:
 
 ---
 
-## 🏗️ Cara Build & Run
+## Cara Build & Run
 
 ### Build Cepat (Portable)
 Buka terminal di folder project, ketik:
@@ -52,7 +52,7 @@ Script ini akan menghasilkan satu file installer di folder `installer/` yang sud
 
 ---
 
-## 📊 Penggunaan Sumber Daya (Resource Usage)
+## Penggunaan Sumber Daya (Resource Usage)
 
 Aplikasi ini sudah dioptimasi habis-habisan:
 - **RAM:** Stabil di kisaran **41 MB** (bisa naik sedikit tergantung resolusi video). Ini jauh lebih kecil dibanding browser atau aplikasi wallpaper lainnya.
@@ -60,7 +60,7 @@ Aplikasi ini sudah dioptimasi habis-habisan:
 
 ---
 
-## 📜 Lisensi & Aturan (Free to Use)
+## Lisensi & Aturan (Free to Use)
 
 Project ini bersifat **Open Source**. Kamu bebas menggunakan, menyebarkan, bahkan memodifikasi kodenya sesuka hati (Open for modification). 
 
