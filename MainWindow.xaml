@@ -44,9 +44,17 @@
                   BorderBrush="{StaticResource BrBorder}"
                   BorderThickness="1" CornerRadius="7"
                   Padding="10,7">
-            <TextBlock Text="MockingCLOWN v3.0"
-                       FontSize="10"
-                       Foreground="{StaticResource BrTextDim}"/>
+            <StackPanel>
+              <TextBlock Text="MockingCLOWN v3.3"
+                         FontSize="10"
+                         Foreground="{StaticResource BrTextDim}"/>
+              <TextBlock FontSize="10" Margin="0,2,0,0">
+                <Hyperlink NavigateUri="https://github.com/loudersyoakim/LiveWallpaper"
+                           RequestNavigate="OnGitHubLink">
+                  <Run Text="by. Louders" Foreground="{StaticResource BrAccent}"/>
+                </Hyperlink>
+              </TextBlock>
+            </StackPanel>
           </Border>
         </StackPanel>
 

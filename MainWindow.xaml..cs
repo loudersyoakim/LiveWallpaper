@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Navigation;
 using LiveWallpaper.Engine;
 
 namespace LiveWallpaper;
@@ -110,6 +111,16 @@ public partial class MainWindow : Window
 
     private void OnNav_VideoSingle(object s, RoutedEventArgs e) => Navigate("single");
     private void OnNav_VideoBatch (object s, RoutedEventArgs e) => Navigate("batch");
+
+    private void OnGitHubLink(object s, RequestNavigateEventArgs e)
+    {
+        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+        {
+            FileName        = e.Uri.AbsoluteUri,
+            UseShellExecute = true
+        });
+        e.Handled = true;
+    }
 
     // ── Stop All ─────────────────────────────────────────────────────────────
 
