@@ -92,6 +92,8 @@
 
       <!-- ACTIONS -->
       <StackPanel Orientation="Horizontal">
+        <Button Style="{StaticResource PrimaryBtn}" Content="▶  Play"
+                Click="OnPlay" Width="130" Margin="0,0,8,0"/>
         <Button Style="{StaticResource GhostBtn}" Content="Stop"
                 Click="OnStop" Width="80"/>
       </StackPanel>

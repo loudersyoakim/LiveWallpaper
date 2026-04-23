@@ -82,13 +82,28 @@ public partial class VideoSinglePage : Page
         if (!string.IsNullOrEmpty(_file))
             dlg.InitialDirectory = Path.GetDirectoryName(_file);
 
-        if (dlg.ShowDialog() != true) return;
+        // Pass owner window explicitly — prevents the dialog from opening
+        // behind the app on first use and returning a false cancel result.
+        if (dlg.ShowDialog(Window.GetWindow(this)) != true) return;
 
         _file = dlg.FileName;
         FileLbl.Text       = Path.GetFileName(_file);
         FileLbl.Foreground = (System.Windows.Media.Brush)FindResource("BrTextPri");
         Cfg?.Set("single/file", _file);
 
+        ApplyWallpaper();
+    }
+
+    // ── Play / Apply ──────────────────────────────────────────────────────────
+
+    private void OnPlay(object s, RoutedEventArgs e)
+    {
+        if (string.IsNullOrEmpty(_file) || !File.Exists(_file))
+        {
+            // No file yet — open the browser so the user can pick one
+            OnBrowse(s, e);
+            return;
+        }
         ApplyWallpaper();
     }
 

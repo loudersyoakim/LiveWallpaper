@@ -1,6 +1,6 @@
 [Setup]
 AppName=LiveWallpaper
-AppVersion=3.1
+AppVersion=3.2
 AppPublisher=MockingCLOWN
 AppPublisherURL=https://github.com/loudersyoakim
 AppCopyright=Copyright (C) 2026 MockingCLOWN
@@ -8,7 +8,7 @@ DefaultDirName={localappdata}\Programs\LiveWallpaper
 DefaultGroupName=LiveWallpaper
 DisableProgramGroupPage=yes
 OutputDir=installer
-OutputBaseFilename=LiveWallpaper_Setup_v3.1
+OutputBaseFilename=LiveWallpaper_Setup_v3.2
 SetupIconFile=app_icon.ico
 Compression=lzma2/ultra64
 SolidCompression=yes

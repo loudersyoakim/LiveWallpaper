@@ -82,20 +82,52 @@ public sealed class WallpaperEngine : IDisposable
             Log("[Wall] ERROR: Progman not found");
             return IntPtr.Zero;
         }
-        Log($"[Wall] Progman: {pm}");
-        _hostHwnd = pm;
-        return pm;
+
+        // ── KEY FIX ─────────────────────────────────────────────────────────
+        // Send the undocumented 0x052C message to Progman. This causes the
+        // Windows shell to spawn a WorkerW window layered BEHIND the desktop
+        // icons (SHELLDLL_DefView). Without this call, no background render
+        // layer exists and mpv's window is invisible behind the desktop image
+        // — unless another live-wallpaper app already sent this message first.
+        Win32.SendMessageTimeout(pm, 0x052C, IntPtr.Zero, IntPtr.Zero,
+                                 Win32.SMTO_NORMAL, 1000, out _);
+
+        // Find the WorkerW that sits BEHIND the desktop icons.
+        // Strategy: enumerate top-level windows to find the WorkerW that
+        // contains SHELLDLL_DefView, then grab the sibling WorkerW that
+        // follows it — that sibling is the background render layer.
+        IntPtr workerW = IntPtr.Zero;
+        Win32.EnumWindows((hwnd, _) =>
+        {
+            if (Win32.FindWindowEx(hwnd, IntPtr.Zero, "SHELLDLL_DefView", null) != IntPtr.Zero)
+            {
+                workerW = Win32.FindWindowEx(IntPtr.Zero, hwnd, "WorkerW", null);
+                return false; // stop enumeration
+            }
+            return true;
+        }, IntPtr.Zero);
+
+        _hostHwnd = workerW != IntPtr.Zero ? workerW : pm;
+        Log($"[Wall] Host HWND: {_hostHwnd} ({(workerW != IntPtr.Zero ? "WorkerW" : "Progman (fallback)")})");
+        return _hostHwnd;
     }
 
-    private void FixZOrder(IntPtr progman)
+    private void FixZOrder(IntPtr host)
     {
-        var defView = Win32.FindWindowEx(progman, IntPtr.Zero, "SHELLDLL_DefView", null);
+        // SHELLDLL_DefView may be a child of a top-level WorkerW (not of our
+        // host), so search from the desktop level instead of from host only.
+        IntPtr defView = IntPtr.Zero;
+        Win32.EnumWindows((hwnd, _) =>
+        {
+            defView = Win32.FindWindowEx(hwnd, IntPtr.Zero, "SHELLDLL_DefView", null);
+            return defView == IntPtr.Zero; // stop when found
+        }, IntPtr.Zero);
         if (defView == IntPtr.Zero) return;
 
         IntPtr mpvWin = IntPtr.Zero;
-        Win32.EnumChildWindows(progman, (hwnd, _) =>
+        Win32.EnumChildWindows(host, (hwnd, _) =>
         {
-            if (hwnd != defView) mpvWin = hwnd;
+            mpvWin = hwnd;
             return true;
         }, IntPtr.Zero);
 
