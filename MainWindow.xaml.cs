@@ -24,6 +24,51 @@ public partial class MainWindow : Window
         Navigate("single");
     }
 
+    // ── Silent auto-start (called on --silent startup, no window shown) ───────
+
+    /// <summary>
+    /// Reads the last-used settings from config and starts the wallpaper
+    /// immediately, without showing the window or navigating to any page.
+    /// Called when the app is launched with --silent (e.g. from Windows Startup).
+    /// </summary>
+    public void SilentAutoStart()
+    {
+        var file = Cfg.Get("single/file");
+        if (string.IsNullOrEmpty(file) || !System.IO.File.Exists(file))
+        {
+            App.Log("[App] SilentAutoStart: no saved file, skipping");
+            return;
+        }
+
+        int    monitorIdx = Cfg.GetInt   ("single/monitor",  0);
+        string fit        = Cfg.Get      ("single/fit",      WallpaperEngine.FitOptions[1]);
+        int    volume     = (int)Cfg.GetDouble("single/volume",   0);
+        double speed      =      Cfg.GetDouble("single/speed",    0);
+        int    bright     = (int)Cfg.GetDouble("single/bright",   0);
+        int    contrast   = (int)Cfg.GetDouble("single/contrast", 0);
+        int    panX       = (int)Cfg.GetDouble("single/panx",     0);
+        int    panY       = (int)Cfg.GetDouble("single/pany",     0);
+
+        App.Log($"[App] SilentAutoStart: \"{System.IO.Path.GetFileName(file)}\"");
+
+        bool ok = Wall.Play(file,
+            speedSlider:  speed,
+            brightness:   bright,
+            contrast:     contrast,
+            panX:         panX,
+            panY:         panY,
+            fit:          fit,
+            loop:         true,
+            volume:       volume,
+            monitorIndex: monitorIdx);
+
+        SetStatus(ok
+            ? $"> {System.IO.Path.GetFileName(file)}"
+            : "! Could not start wallpaper", ok);
+
+        App.Log($"[App] SilentAutoStart: {(ok ? "OK" : "FAILED")}");
+    }
+
     // ── Status ───────────────────────────────────────────────────────────────
 
     public void SetStatus(string msg, bool playing)

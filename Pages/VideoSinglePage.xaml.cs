@@ -65,8 +65,9 @@ public partial class VideoSinglePage : Page
 
         _loaded = true;
 
-        // Auto-start if there's a saved file
-        if (!string.IsNullOrEmpty(_file) && File.Exists(_file))
+        // Auto-start if there's a saved file — but skip if already playing
+        // (e.g. SilentAutoStart already applied it before the window opened)
+        if (!string.IsNullOrEmpty(_file) && File.Exists(_file) && Wall?.IsPlaying != true)
             ApplyWallpaper();
     }
 

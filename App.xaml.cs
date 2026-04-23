@@ -60,8 +60,14 @@ public partial class App : System.Windows.Application
 
         _win = new MainWindow();
         MainWindow = _win;
-        _win.Show();
-        BuildTray();
+
+        bool silent = e.Args.Contains("--silent");
+        if (!silent)
+            _win.Show();
+        else
+            _win.SilentAutoStart();   // play from saved config, no window
+
+        BuildTray(startedSilent: silent);
 
         // Periodic memory trim: every 60 s while window is hidden (tray-only mode)
         _trimTimer = new System.Threading.Timer(_ => MaybeTrimMemory(), null,
@@ -114,9 +120,45 @@ public partial class App : System.Windows.Application
         catch { }
     }
 
+    // ── Windows Startup registry ──────────────────────────────────────────────
+
+    private const string RegRunKey  = @"Software\Microsoft\Windows\CurrentVersion\Run";
+    private const string RegAppName = "LiveWallpaper";
+
+    public static bool IsStartupEnabled()
+    {
+        try
+        {
+            using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(RegRunKey, false);
+            return key?.GetValue(RegAppName) != null;
+        }
+        catch { return false; }
+    }
+
+    public static void SetStartup(bool enable)
+    {
+        try
+        {
+            using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(RegRunKey, true);
+            if (key == null) return;
+            if (enable)
+            {
+                var exe = Process.GetCurrentProcess().MainModule?.FileName ?? "";
+                key.SetValue(RegAppName, $"\"{exe}\" --silent");
+                Log("[App] Startup entry added");
+            }
+            else
+            {
+                key.DeleteValue(RegAppName, throwOnMissingValue: false);
+                Log("[App] Startup entry removed");
+            }
+        }
+        catch (Exception ex) { Log($"[App] SetStartup error: {ex.Message}"); }
+    }
+
     // ── Tray ─────────────────────────────────────────────────────────────────
 
-    private void BuildTray()
+    private void BuildTray(bool startedSilent = false)
     {
         Icon icon;
         var icoPath = Path.Combine(AppContext.BaseDirectory, "app.ico");
@@ -133,6 +175,17 @@ public partial class App : System.Windows.Application
         var menu = new ContextMenuStrip();
         menu.Items.Add("Show",     null, (_, _) => ShowMain());
         menu.Items.Add("Stop All", null, (_, _) => (_win as MainWindow)?.StopAll());
+        menu.Items.Add(new ToolStripSeparator());
+
+        // ── Launch at startup toggle ─────────────────────────────────────────
+        var startupItem = new ToolStripMenuItem("Launch at Startup")
+        {
+            Checked      = IsStartupEnabled(),
+            CheckOnClick = true,
+        };
+        startupItem.CheckedChanged += (_, _) => SetStartup(startupItem.Checked);
+        menu.Items.Add(startupItem);
+
         menu.Items.Add(new ToolStripSeparator());
         menu.Items.Add("Quit",     null, (_, _) => Quit());
 
