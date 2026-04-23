@@ -1,4 +1,4 @@
-# LiveWallpaper (v3.2)
+# LiveWallpaper
 
 Desktop live wallpaper engine berbasis **mpv** untuk Windows 10/11. 
 Putar video sebagai wallpaper desktop dengan dukungan multi-monitor, playlist, scheduler, dan kontrol penuh.
